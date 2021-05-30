@@ -6,7 +6,7 @@ from fastapi_components.logging import LoggerSettings, setup_logging
 from fastapi_components.state_manager import FastAPIStateManager
 from pydantic import BaseSettings
 from pydantic.types import PositiveInt
-from starlette.responses import PlainTextResponse
+from starlette.responses import PlainTextResponse, Response
 
 from app.components.twitch_api import TwitchApi, get_twitch_api
 
@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
 
 @api_router.get("/")
-async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
+async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Response:
     # result = await ta.get_boobs_stream()
     return templates.TemplateResponse("index.html", {"request": request, "channel_name": "melharucos"})
 
