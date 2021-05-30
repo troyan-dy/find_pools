@@ -25,6 +25,12 @@ class Settings(BaseSettings):
         env_file = "local.env"
 
 
+@api_router.get("/ping")
+async def ping(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
+    await ta.ping()
+    return PlainTextResponse("pong")
+
+
 @api_router.get("/")
 async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Response:
     channeles = await ta.get_boobs_stream()
@@ -32,31 +38,18 @@ async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Re
     return templates.TemplateResponse("index.html", {"request": request, "channel_name": channel_name})
 
 
-@api_router.get("/ping")
-async def ping(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
-    await ta.ping()
-    return PlainTextResponse("pong")
+@api_router.get("/asmr")
+async def get_asmr(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Response:
+    channeles = await ta.get_asmr()
+    channel_name = random.choice(channeles)
+    return templates.TemplateResponse("index.html", {"request": request, "channel_name": channel_name})
 
 
-# get_boobs_stream
-
-
-@api_router.get("/get_boobs_stream")
-async def get_boobs_stream(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
-    result = await ta.get_boobs_stream()
-    return PlainTextResponse(str(result))
-
-
-@api_router.get("/get_chatting")
-async def get_chatting(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
-    result = await ta.get_chatting()
-    return PlainTextResponse(str(result))
-
-
-@api_router.get("/get_asmr")
-async def get_asmr(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
-    result = await ta.get_asmr()
-    return PlainTextResponse(str(result))
+@api_router.get("/chatting")
+async def get_chatting(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
+    channeles = await ta.get_chatting()
+    channel_name = random.choice(channeles)
+    return templates.TemplateResponse("index.html", {"request": request, "channel_name": channel_name})
 
 
 def create_app(settings: Settings) -> FastAPI:
