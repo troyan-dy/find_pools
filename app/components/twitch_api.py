@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, cast
 
 from fastapi import Request
@@ -9,6 +10,7 @@ from fastapi_components.state import State
 class TwitchApi(BaseComponent, LoggerMixin):
     async def startup(self, state: State) -> State:
         self.session = state.session
+        self.client_id = state.settings.client_id
         state.twitch_api = self
         return state
 
@@ -19,22 +21,23 @@ class TwitchApi(BaseComponent, LoggerMixin):
         self.logger.info("PING")
 
     async def get_category(self, category: str) -> list[Any]:
-        url = "https://api.twitch.tv/kraken/streams/?game=Pools, Hot Tubs, and Beaches"
         names = []
-        limit = 100
-        params = {"game": category, "limit": limit, "offset": 0}
-        headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": "i38s94bpzao27eszx5zgoqnqn9fq55"}
-        while 1:
-            r = await self._get(url, params=params, headers=headers, raise_for_status=True, verify_ssl=False)
-
-            streams = r.get("streams", [])
-            _names = [s["channel"]["name"] for s in streams]
-            names += _names
-            params["offset"] += limit  # type: ignore
-            self.logger.info(f"len(_urls): {len(_names)}")
-            if len(_names) != limit:
-                break
+        coros = [self._get_names(category=category, limit=100, offset=i * 100) for i in range(4)]
+        _names = await asyncio.gather(*coros)
+        for _n in _names:
+            names += _n
         return names
+
+    async def _get_names(self, category, limit=100, offset=0):
+        params = {"game": category, "limit": limit, "offset": offset}
+        headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": self.client_id}
+        url = "https://api.twitch.tv/kraken/streams/"
+        r = await self._get(url, params=params, headers=headers, raise_for_status=True, verify_ssl=False)
+
+        streams = r.get("streams", [])
+        _names = [s["channel"]["name"] for s in streams]
+        self.logger.info(f"len(_names): {len(_names)}, limit: {limit}, offset: {offset}")
+        return _names
 
     async def get_boobs_stream(self) -> list[Any]:
         return await self.get_category(category="Pools, Hot Tubs, and Beaches")
