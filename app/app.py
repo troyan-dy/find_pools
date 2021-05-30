@@ -15,7 +15,7 @@ api_router = APIRouter()
 class Settings(BaseSettings):
     log: LoggerSettings = LoggerSettings()
     client_id: str
-    port: PositiveInt
+    port: PositiveInt = 8000
 
     class Config:
         env_file = "local.env"
