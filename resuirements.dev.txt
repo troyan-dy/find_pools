@@ -1,0 +1,8 @@
+pytest==6.2
+pytest-asyncio==0.14
+async-asgi-testclient==1.4.6
+async-timeout==3.0.1
+black==20.8b1
+isort==5.7.0
+flake8==3.8.4
+mypy==0.812
