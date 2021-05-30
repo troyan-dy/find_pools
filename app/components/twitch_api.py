@@ -20,7 +20,7 @@ class TwitchApi(BaseComponent, LoggerMixin):
 
     async def get_category(self, category: str) -> list[Any]:
         url = "https://api.twitch.tv/kraken/streams/?game=Pools, Hot Tubs, and Beaches"
-        urls = []
+        names = []
         limit = 100
         params = {"game": category, "limit": limit, "offset": 0}
         headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": "i38s94bpzao27eszx5zgoqnqn9fq55"}
@@ -28,13 +28,13 @@ class TwitchApi(BaseComponent, LoggerMixin):
             r = await self._get(url, params=params, headers=headers, raise_for_status=True, verify_ssl=False)
 
             streams = r.get("streams", [])
-            _urls = [s["channel"]["url"] for s in streams]
-            urls += _urls
+            _names = [s["channel"]["name"] for s in streams]
+            names += _names
             params["offset"] += limit  # type: ignore
-            self.logger.info(f"len(_urls): {len(_urls)}")
-            if len(_urls) != limit:
+            self.logger.info(f"len(_urls): {len(_names)}")
+            if len(_names) != limit:
                 break
-        return urls
+        return names
 
     async def get_boobs_stream(self) -> list[Any]:
         return await self.get_category(category="Pools, Hot Tubs, and Beaches")

@@ -1,7 +1,18 @@
 <html>
   <body>
     <!-- Add a placeholder for the Twitch embed -->
-    <div id="twitch-embed"></div>
+    <style>
+      html,
+      body {
+          margin: 0px;
+          height: 100%;
+      }
+      .center {
+          /* background: red; */
+          height: 100%;
+      }
+     </style>
+    <div id="twitch-embed" class='center'></div>
 
     <!-- Load the Twitch embed JavaScript file -->
     <script src="https://embed.twitch.tv/embed/v1.js"></script>
@@ -9,8 +20,8 @@
     <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
     <script type="text/javascript">
       new Twitch.Embed("twitch-embed", {
-        width: 1920,
-        height: 1080,
+        width: window.innerWidth,
+        height: window.innerHeight,
         channel: "{{channel_name}}",
         // Only needed if this page is going to be embedded on other websites
         parent: ["find-pools.herokuapp.com"]
