@@ -1,5 +1,6 @@
-# FastAPI-template-repository
+# find pools 
 
+https://find-pools.herokuapp.com/
 ## Dependencies
 - docker-compose
 - python 3.9
