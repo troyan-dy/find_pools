@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
 
 @api_router.get("/ping")
-async def ping(ta=Depends(get_twitch_api)) -> PlainTextResponse:
+async def ping(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
     await ta.ping()
     return PlainTextResponse("pong")
 

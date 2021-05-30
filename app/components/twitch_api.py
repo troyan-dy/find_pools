@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 from fastapi import Request
 from fastapi_components.components.base import BaseComponent
 from fastapi_components.logging import LoggerMixin
@@ -10,13 +12,13 @@ class TwitchApi(BaseComponent, LoggerMixin):
         state.twitch_api = self
         return state
 
-    async def shutdown(self):
+    async def shutdown(self) -> None:
         pass
 
-    async def ping(self):
+    async def ping(self) -> None:
         self.logger.info("PING")
 
-    async def get_category(self, category):
+    async def get_category(self, category: str) -> list[Any]:
         url = "https://api.twitch.tv/kraken/streams/?game=Pools, Hot Tubs, and Beaches"
         urls = []
         limit = 100
@@ -28,25 +30,26 @@ class TwitchApi(BaseComponent, LoggerMixin):
             streams = r.get("streams", [])
             _urls = [s["channel"]["url"] for s in streams]
             urls += _urls
-            params["offset"] += limit
+            params["offset"] += limit  # type: ignore
             self.logger.info(f"len(_urls): {len(_urls)}")
             if len(_urls) != limit:
                 break
         return urls
 
-    async def get_boobs_stream(self):
+    async def get_boobs_stream(self) -> list[Any]:
         return await self.get_category(category="Pools, Hot Tubs, and Beaches")
 
-    async def get_chatting(self):
+    async def get_chatting(self) -> list[Any]:
         return await self.get_category(category="Just Chatting")
 
-    async def get_asmr(self):
+    async def get_asmr(self) -> list[Any]:
         return await self.get_category(category="ASMR")
 
-    async def _get(self, *args, **kwargs):
+    async def _get(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         async with self.session.get(*args, **kwargs) as r:
-            return await r.json()
+            result = await r.json()
+            return cast(dict[str, Any], result)
 
 
 async def get_twitch_api(request: Request) -> TwitchApi:
-    return request.app.state.twitch_api
+    return cast(TwitchApi, request.app.state.twitch_api)
