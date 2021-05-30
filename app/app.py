@@ -46,7 +46,7 @@ async def get_asmr(request: Request, ta: TwitchApi = Depends(get_twitch_api)) ->
 
 
 @api_router.get("/chatting")
-async def get_chatting(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
+async def get_chatting(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Response:
     channeles = await ta.get_chatting()
     channel_name = random.choice(channeles)
     return templates.TemplateResponse("index.html", {"request": request, "channel_name": channel_name})

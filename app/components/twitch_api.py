@@ -28,7 +28,7 @@ class TwitchApi(BaseComponent, LoggerMixin):
             names += _n
         return names
 
-    async def _get_names(self, category, limit=100, offset=0):
+    async def _get_names(self, category: str, limit: int = 100, offset: int = 0) -> list[str]:
         params = {"game": category, "limit": limit, "offset": offset}
         headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": self.client_id}
         url = "https://api.twitch.tv/kraken/streams/"
