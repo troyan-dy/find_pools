@@ -1,5 +1,6 @@
 import uvicorn
-from fastapi import APIRouter, Depends, FastAPI
+from fastapi import APIRouter, Depends, FastAPI, Request
+from fastapi.templating import Jinja2Templates
 from fastapi_components.components.http_session import AIOHTTPSessionComponent
 from fastapi_components.logging import LoggerSettings, setup_logging
 from fastapi_components.state_manager import FastAPIStateManager
@@ -10,6 +11,7 @@ from starlette.responses import PlainTextResponse
 from app.components.twitch_api import TwitchApi, get_twitch_api
 
 api_router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
 
 class Settings(BaseSettings):
@@ -19,6 +21,12 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = "local.env"
+
+
+@api_router.get("/")
+async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse:
+    # result = await ta.get_boobs_stream()
+    return templates.TemplateResponse("index.html", {"request": request, "channel_name": "melharucos"})
 
 
 @api_router.get("/ping")
