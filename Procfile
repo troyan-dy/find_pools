@@ -1,1 +1,1 @@
-web: uvicorn app.app:app --host=0.0.0.0 --port=${PORT:-8000}
+web: PORT=${PORT:-8000} python -m app.app

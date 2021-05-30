@@ -4,6 +4,7 @@ from fastapi_components.components.http_session import AIOHTTPSessionComponent
 from fastapi_components.logging import LoggerSettings, setup_logging
 from fastapi_components.state_manager import FastAPIStateManager
 from pydantic import BaseSettings
+from pydantic.types import PositiveInt
 from starlette.responses import PlainTextResponse
 
 from app.components.twitch_api import TwitchApi, get_twitch_api
@@ -14,6 +15,7 @@ api_router = APIRouter()
 class Settings(BaseSettings):
     log: LoggerSettings = LoggerSettings()
     client_id: str
+    port: PositiveInt
 
     class Config:
         env_file = "local.env"
@@ -63,5 +65,6 @@ def create_app(settings: Settings) -> FastAPI:
 
 
 if __name__ == "__main__":
-    app = create_app(settings=Settings())
-    uvicorn.run(app=app, host="0.0.0.0", port=8000)
+    settings = Settings()
+    app = create_app(settings=settings)
+    uvicorn.run(app=app, host="0.0.0.0", port=settings.port)
