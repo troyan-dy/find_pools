@@ -2,14 +2,14 @@ from typing import AsyncGenerator
 
 import fastapi
 import pytest
+from app.app import Settings, create_app
 from async_asgi_testclient import TestClient
-
-from app import app
 
 
 @pytest.fixture
 async def test_app() -> fastapi.FastAPI:
-    return app.create_app()
+    settings = Settings(client_id="client_id")
+    return create_app(settings)
 
 
 @pytest.fixture

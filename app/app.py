@@ -46,8 +46,7 @@ async def get_asmr(ta: TwitchApi = Depends(get_twitch_api)) -> PlainTextResponse
     return PlainTextResponse(str(result))
 
 
-def create_app() -> FastAPI:
-    settings = Settings()
+def create_app(settings: Settings) -> FastAPI:
     setup_logging(settings.log)
     state_manager = FastAPIStateManager(
         components=[AIOHTTPSessionComponent(), TwitchApi()],
@@ -63,6 +62,6 @@ def create_app() -> FastAPI:
     return app
 
 
-app = create_app()
 if __name__ == "__main__":
+    app = create_app(settings=Settings())
     uvicorn.run(app=app, host="0.0.0.0", port=8000)
