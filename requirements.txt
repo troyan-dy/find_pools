@@ -5,3 +5,4 @@ ujson==4.0.2
 uvicorn==0.13.4
 fastapi-components==0.4.1
 aiohttp
+jinja2
