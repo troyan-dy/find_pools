@@ -1,3 +1,5 @@
+import random
+
 import uvicorn
 from fastapi import APIRouter, Depends, FastAPI, Request
 from fastapi.templating import Jinja2Templates
@@ -25,8 +27,9 @@ class Settings(BaseSettings):
 
 @api_router.get("/")
 async def index(request: Request, ta: TwitchApi = Depends(get_twitch_api)) -> Response:
-    # result = await ta.get_boobs_stream()
-    return templates.TemplateResponse("index.html", {"request": request, "channel_name": "melharucos"})
+    channeles = await ta.get_boobs_stream()
+    channel_name = random.choice(channeles)
+    return templates.TemplateResponse("index.html", {"request": request, "channel_name": channel_name})
 
 
 @api_router.get("/ping")
