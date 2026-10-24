@@ -1,2 +1,11 @@
 [flake8]
+# pycodestyle / pyflakes (defaults) + wemake-python-styleguide
 max-line-length = 120
+extend-select = WPS
+# Fail loudly instead of silently skipping WPS when it is not installed.
+require-plugins = wemake-python-styleguide
+format = wemake
+show-source = true
+statistics = false
+doctests = true
+exclude = .git,__pycache__,.venv,venv

@@ -1,8 +1,9 @@
-pytest==6.2
-pytest-asyncio==0.14
-async-asgi-testclient==1.4.6
-async-timeout==3.0.1
-black==20.8b1
-isort==5.7.0
-flake8==3.8.4
-mypy==0.812
+pytest==9.1.1
+pytest-asyncio==1.4.0
+async-asgi-testclient==1.4.11
+async-timeout==5.0.1
+black==26.10.1
+isort==9.0.2
+flake8==7.4.1
+mypy==2.4.0
+wemake-python-styleguide==1.8.1
