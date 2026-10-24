@@ -3,7 +3,7 @@
 https://find-pools.herokuapp.com/
 ## Dependencies
 - docker-compose
-- python 3.9
+- python 3.15
 
 ## Commands
 ### Install

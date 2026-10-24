@@ -2,9 +2,10 @@ import asyncio
 from typing import Any, cast
 
 from fastapi import Request
-from fastapi_components.components.base import BaseComponent
-from fastapi_components.logging import LoggerMixin
-from fastapi_components.state import State
+from starlette.datastructures import State
+
+from app.components.base import BaseComponent
+from app.components.logging import LoggerMixin
 
 
 class TwitchApi(BaseComponent, LoggerMixin):
@@ -32,7 +33,7 @@ class TwitchApi(BaseComponent, LoggerMixin):
         params = {"game": category, "limit": limit, "offset": offset}
         headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": self.client_id}
         url = "https://api.twitch.tv/kraken/streams/"
-        r = await self._get(url, params=params, headers=headers, raise_for_status=True, verify_ssl=False)
+        r = await self._get(url, params=params, headers=headers, raise_for_status=True, ssl=False)
 
         streams = r.get("streams", [])
         _names = [s["channel"]["name"] for s in streams]
