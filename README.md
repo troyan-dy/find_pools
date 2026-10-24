@@ -12,7 +12,7 @@ https://find-pools.herokuapp.com/
 ### Run tests
 - `make test`
 ### Linting
-- `make lint`
+- `make lint` (mypy + flake8 with [wemake-python-styleguide](https://github.com/wemake-services/wemake-python-styleguide), config in `.flake8`)
 
 ### Formatting
 - `make format`
